@@ -6,7 +6,7 @@ export const registerUser = async (req, res) => {
   const { userName, email, password } = req.body;
   try {
     const checkUserEmail = await User.findOne({ email });
-    const checkUserName=await User.findOne({userName});
+    const checkUserName = await User.findOne({ userName });
     if (checkUserEmail) {
       return res.json({
         success: false,
@@ -35,7 +35,7 @@ export const registerUser = async (req, res) => {
   } catch (e) {
     console.log(e);
 
-   return res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Some Error Occured",
     });
@@ -47,7 +47,7 @@ export const loginUser = async (req, res) => {
   try {
     const checkUser = await User.findOne({ email });
     if (!checkUser) {
-     return res.json({
+      return res.json({
         success: false,
         message: "Incorrect Credentials",
       });
@@ -60,7 +60,12 @@ export const loginUser = async (req, res) => {
       });
     }
     const token = jwt.sign(
-      { id: checkUser._id, role: checkUser.role },
+      {
+        id: checkUser._id,
+        role: checkUser.role,
+        email: checkUser.email,
+        userName: checkUser.userName,
+      },
       "CLIENT_SECRET_KEY",
       { expiresIn: "60m" }
     );
@@ -75,12 +80,36 @@ export const loginUser = async (req, res) => {
       },
     });
   } catch (e) {
-   return res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Some error occured",
     });
   }
 };
 
+export const logoutUser = (req, res) => {
+  res.clearCookie("token").json({
+    success: true,
+    message: "Logout Successfully",
+  });
+};
 
-
+export const authMiddleware = async (req, res, next) => {
+  const token = req.cookies.token;
+  if (!token) {
+    return res.status(401).json({
+      success: false,
+      message: "Unauthorized access",
+    });
+  }
+  try {
+    const decoded = jwt.verify(token, "CLIENT_SECRET_KEY");
+    req.user = decoded;
+    next();
+  } catch (error) {
+    return res.status(401).json({
+      success: false,
+      message: "Unauthorized access",
+    });
+  }
+};
