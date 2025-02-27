@@ -67,7 +67,7 @@ const AuthLogin = () => {
         </div>
         <button
           type="submit"
-          className="w-full font-semibold text-xl bg-black text-white p-2 m-3 hover:opacity-80"
+          className="w-full font-semibold text-xl bg-black text-white p-2 my-6 hover:opacity-80"
         >
           Login
         </button>
