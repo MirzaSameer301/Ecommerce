@@ -1,3 +1,4 @@
+import ProductForm from "@/components/admin-view/ProductForm";
 import ProductImageUpload from "@/components/admin-view/ProductImageUpload";
 import {
   Sheet,
@@ -7,11 +8,29 @@ import {
 } from "@/components/ui/sheet";
 import React, { useState } from "react";
 
+const initialState={
+  image: null,
+  title: "",
+  description: "",
+  category: "",
+  brand: "",
+  price: "",
+  salePrice: "",
+  totalStock: "",
+}
+
 const AdminProducts = () => {
   const [openProductBar, setOpenProductBar] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [uploadImageUrl, setUploadImageUrl] = useState("");
   const [imageLoadingState, setImageLoadingState] = useState(false)
+  const [formData, setFormData] = useState(initialState);
+
+  const handleSubmit=(e)=>{
+    e.preventDefault();
+    
+  }
+  
   return (
     <div>
       <button
@@ -26,12 +45,13 @@ const AdminProducts = () => {
           setOpenProductBar(false);
         }}
       >
-        <SheetContent side="right" className={`max-w-md`}>
+        <SheetContent side="right" className={`overflow-auto max-w-md flex flex-col gap-4 mx-auto p-4`}>
           <SheetHeader>
-            <SheetTitle className={`text-xl font-bold text-center my-2`}>
+            <SheetTitle className={`text-xl font-bold text-center`}>
               Add New Product
             </SheetTitle>
-            <ProductImageUpload
+          </SheetHeader>
+          <ProductImageUpload
               imageFile={imageFile}
               setImageFile={setImageFile}
               uploadImageUrl={uploadImageUrl}
@@ -39,7 +59,7 @@ const AdminProducts = () => {
               imageLoadingState={imageLoadingState}
               setImageLoadingState={setImageLoadingState}
             />
-          </SheetHeader>
+            <ProductForm formData={formData} setFormData={setFormData} handleSubmit={handleSubmit}/>
         </SheetContent>
       </Sheet>
     </div>

@@ -5,10 +5,10 @@ import { IoLogOutOutline } from "react-icons/io5";
 import { useDispatch } from "react-redux";
 
 const AdminHeader = ({ setOpenSideBar }) => {
-  const dispatch=useDispatch();
-  const handleLogout=()=>{
+  const dispatch = useDispatch();
+  const handleLogout = () => {
     dispatch(logoutUser());
-  }
+  };
   return (
     <header>
       <div className="flex justify-between shadow-sm p-4">
@@ -19,7 +19,10 @@ const AdminHeader = ({ setOpenSideBar }) => {
           <GiHamburgerMenu />
         </button>
         <div className="flex flex-1 justify-end">
-          <button onClick={handleLogout} className="flex gap-2 justify-center items-center bg-black p-3 rounded text-white font-semibold">
+          <button
+            onClick={handleLogout}
+            className="flex gap-2 justify-center items-center bg-black p-3 rounded text-white font-semibold"
+          >
             Logout
             <IoLogOutOutline className="font-bold text-2xl" />
           </button>

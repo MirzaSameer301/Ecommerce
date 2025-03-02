@@ -33,16 +33,16 @@ const AdminSidebar = ({ setOpenSideBar }) => {
   return (
     <div className={`py-10 md:py-6 border-r-1 flex flex-col gap-10`}>
       <div
-        className="left-64 top-2 p-2 text-2xl fixed md:hidden"
+        className="left-56 top-2 p-2 text-2xl fixed md:hidden"
         onClick={() => setOpenSideBar(false)}
       >
         <RxCross2 />
       </div>
-      <div className="px-10 flex gap-2 text-3xl font-extrabold items-center justify-center">
+      <div className="px-10 flex gap-2 text-2xl font-extrabold items-center justify-center">
         <ImStatsBars />
         <h1 className="">Admin Panel</h1>
       </div>
-      <div className="flex flex-1 flex-col gap-2 font-semibold text-gray-500">
+      <div className="flex flex-1 flex-col gap-2 font-semibold">
         {adminSidebarMenuItems.map((item) => (
           <div
             key={item.id}
@@ -50,7 +50,7 @@ const AdminSidebar = ({ setOpenSideBar }) => {
               navigate(`${item.path}`);
               setOpenSideBar(false);
             }}
-            className="cursor-pointer px-10 py-4 text-xl flex gap-2 justify-start items-center hover:bg-gray-200"
+            className="cursor-pointer px-10 py-4 flex gap-2 justify-start items-center hover:bg-gray-200"
           >
             <span>{item.icon}</span>
             <h2>{item.label}</h2>
