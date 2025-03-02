@@ -7,7 +7,7 @@ const storage = multer.memoryStorage();
 cloudinary.config({
   cloud_name: "dkn5lrvhc",
   api_key: "676256567716268",
-  api_secret: "ACKevZEvVC31VzsBGpTH-25tI7I",
+  api_secret: process.env.API_SECRET
 });
 
 export const uploadImageUtil = async (file) => {
