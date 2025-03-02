@@ -3,11 +3,14 @@ import { IoCloudDownloadOutline } from "react-icons/io5";
 import {CiFileOn} from "react-icons/ci"
 import { RxCross2 } from "react-icons/rx";
 import axios from "axios";
+import { Skeleton } from "../ui/skeleton";
 const ProductImageUpload = ({
   imageFile,
   setImageFile,
   uploadImageUrl,
   setUploadImageUrl,
+  imageLoadingState,
+  setImageLoadingState
 }) => {
   const handleChange = (e) => {
     const selectedFile = e.target.files?.[0];
@@ -32,13 +35,19 @@ const ProductImageUpload = ({
     }
   }
   async function uploadImageToCloudinary() {
+    setImageLoadingState(true);
     const data = new FormData();
     data.append("my_file", imageFile);
     const response = await axios.post(
       "http://localhost:3000/api/admin/products/upload-image",
       data
     );
-    console.log(response, "response");
+
+    if(response.data.success){
+      setUploadImageUrl(response.data.result.url);
+      setImageLoadingState(false)
+    }
+    
   }
 
   useEffect(() => {
@@ -65,7 +74,7 @@ const ProductImageUpload = ({
             <IoCloudDownloadOutline className="text-4xl"/>
             <p>drag & drop here or click to select</p>
           </label>
-        ) : (
+        ) : imageLoadingState?(<Skeleton className={`h-14 bg-gray-200`}/>):(
           <div className="flex justify-between items-center p-6 rounded-lg shadow-sm">
             <CiFileOn className="text-3xl"/>
             <span className="font-medium text-gray-700">{imageFile.name}</span>

@@ -11,6 +11,7 @@ const AdminProducts = () => {
   const [openProductBar, setOpenProductBar] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [uploadImageUrl, setUploadImageUrl] = useState("");
+  const [imageLoadingState, setImageLoadingState] = useState(false)
   return (
     <div>
       <button
@@ -35,6 +36,8 @@ const AdminProducts = () => {
               setImageFile={setImageFile}
               uploadImageUrl={uploadImageUrl}
               setUploadImageUrl={setUploadImageUrl}
+              imageLoadingState={imageLoadingState}
+              setImageLoadingState={setImageLoadingState}
             />
           </SheetHeader>
         </SheetContent>
