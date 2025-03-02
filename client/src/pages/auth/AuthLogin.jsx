@@ -13,6 +13,7 @@ const AuthLogin = () => {
   const [openToast, setOpenToast] = useState(false);
   const [message, setMessage] = useState("");
   const dispatch = useDispatch();
+  const navigate=useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();

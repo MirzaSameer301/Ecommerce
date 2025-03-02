@@ -4,6 +4,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import { configDotenv } from "dotenv";
 import authRoutes from "./routes/authRoutes.js";
+import adminRoutes from './routes/adminRoutes.js'
 
 const app = express();
 configDotenv();
@@ -34,7 +35,8 @@ app.use(
     credentials: true,
   })
 );
-app.use('/api/auth',authRoutes)
+app.use('/api/auth',authRoutes);
+app.use('/api/admin/products',adminRoutes);
 
 app.listen(Port, () =>
   console.log(`Server is running at Port ${Port}`)
