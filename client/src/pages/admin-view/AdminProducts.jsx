@@ -7,9 +7,15 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { addProduct, fetchAllProducts } from "@/store/adminProductSlice";
-import React, { useState,useEffect } from "react";
+import {
+  addProduct,
+  fetchAllProducts,
+  editProduct,
+  deleteProduct,
+} from "@/store/adminProductSlice";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import AdminProductTitle from "@/components/admin-view/AdminProductTitle";
 
 const initialState = {
   image: null,
@@ -28,41 +34,79 @@ const AdminProducts = () => {
   const [uploadImageUrl, setUploadImageUrl] = useState("");
   const [imageLoadingState, setImageLoadingState] = useState(false);
   const [formData, setFormData] = useState(initialState);
+  const [editProductId, setEditProductId] = useState(null);
   const dispatch = useDispatch();
-  const {productList}=useSelector(state=>state.adminProducts)
+  const { productList } = useSelector((state) => state.adminProducts);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(
-      addProduct({ ...formData, image: uploadImageUrl })).then((data) => {
-        if(data.payload.success){
-          dispatch(fetchAllProducts);
-          setFormData(initialState);
-          setImageFile(null);
-          setOpenProductBar(false);
-          toast("Product Added Successfully");
-        }
-      });
+    editProductId !== null
+      ? dispatch(editProduct({id:editProductId, formData})).then((data) => {
+          if (data.payload.success) {
+            dispatch(fetchAllProducts());
+            setFormData(initialState);
+            setEditProductId(null);
+            setOpenProductBar(false);
+            toast("Product Updated Successfully");
+          }
+        })
+      : dispatch(addProduct({ ...formData, image: uploadImageUrl })).then(
+          (data) => {
+            if (data.payload.success) {
+              dispatch(fetchAllProducts());
+              setFormData(initialState);
+              setImageFile(null);
+              setOpenProductBar(false);
+              toast("Product Added Successfully");
+            }
+          }
+        );
   };
 
   useEffect(() => {
-    dispatch(fetchAllProducts());
+    dispatch(fetchAllProducts()).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(fetchAllProducts());
+      }
+    });
   }, [dispatch]);
 
-  console.log(productList, "productList");
+  const handleDelete = (productId) => {
+    dispatch(deleteProduct(productId))
+  };
 
+  
   return (
     <div>
-      <button
-        onClick={() => setOpenProductBar(true)}
-        className="bg-black p-4 rounded text-white font-semibold hover:opacity-75"
-      >
-        Create Product
-      </button>
+      <div className="">
+        <div className="w-full flex justify-end">
+          <button
+            onClick={() => setOpenProductBar(true)}
+            className="bg-black p-3 rounded text-white font-semibold hover:opacity-75"
+          >
+            Create Product
+          </button>
+        </div>
+        <div className="my-2 gap-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {productList.length > 0 &&
+            productList.map((product) => (
+              <AdminProductTitle
+                product={product}
+                setFormData={setFormData}
+                setEditProductId={setEditProductId}
+                handleDelete={handleDelete}
+                setOpenProductBar={setOpenProductBar}
+              />
+            ))}
+        </div>
+      </div>
+
       <Sheet
         open={openProductBar}
         onOpenChange={() => {
           setOpenProductBar(false);
+          setEditProductId(null);
+          setFormData(initialState);
         }}
       >
         <SheetContent
@@ -86,6 +130,7 @@ const AdminProducts = () => {
             formData={formData}
             setFormData={setFormData}
             handleSubmit={handleSubmit}
+            editProductId={editProductId}
           />
         </SheetContent>
       </Sheet>

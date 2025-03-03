@@ -60,7 +60,7 @@ const addProductFormElements = [
       placeholder: "Enter total stock",
     },
   ];
-const ProductForm = ({ formData, setFormData,handleSubmit}) => {
+const ProductForm = ({ formData, setFormData,handleSubmit,editProductId}) => {
   return (
     <form onSubmit={handleSubmit}>
       {addProductFormElements.map((field) => {
@@ -137,7 +137,7 @@ const ProductForm = ({ formData, setFormData,handleSubmit}) => {
       })}
 
       <button type="submit" className="bg-black w-full p-2 text-white font-semibold hover:opacity-85 my-2">
-        Add
+        {editProductId ? "Edit":"Add"}
       </button>
     </form>
   );

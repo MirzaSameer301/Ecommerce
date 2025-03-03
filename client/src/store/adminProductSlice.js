@@ -22,7 +22,7 @@ export const addProduct = createAsyncThunk(
     return response.data;
   }
 );
-export const aditProduct = createAsyncThunk(
+export const editProduct = createAsyncThunk(
   "/products/adit/:id",
   async ({ id, formData }) => {
     const response = await axios.put(
@@ -48,9 +48,9 @@ export const fetchAllProducts = createAsyncThunk(
     return response.data;
   }
 );
-export const delteProduct = createAsyncThunk(
+export const deleteProduct = createAsyncThunk(
   "/products/delete/:id",
-  async (formData) => {
+  async (id) => {
     const response = await axios.delete(
       `http://localhost:3000/api/admin/products/delete/${id}`
     );
