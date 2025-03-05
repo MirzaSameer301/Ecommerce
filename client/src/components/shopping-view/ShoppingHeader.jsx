@@ -60,7 +60,7 @@ const UserProfileAndCart = ({ user }) => {
 
 const MenuItems = () => {
   return (
-    <div className="flex flex-col md:flex-row md:items-center gap-2 font-medium md:text-sm ">
+    <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 font-medium md:text-sm ">
       {shoppingViewHeaderMenuItems.map((menuItem) => (
         <Link
           key={menuItem.id}

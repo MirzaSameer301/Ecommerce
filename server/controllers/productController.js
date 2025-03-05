@@ -73,7 +73,7 @@ export const getAllProducts = async (req, res) => {
   }
 };
 
-export const editProduct = async (req, res) => {
+export let editProduct = async (req, res) => {
   try {
     const { id } = req.params;
     const {
