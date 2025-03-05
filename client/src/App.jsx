@@ -65,7 +65,7 @@ export const App = () => {
           }
         >
           <Route path="home" element={<ShoppingHome />} />
-          <Route path="listings" element={<ShoppingListings />} />
+          <Route path="listing" element={<ShoppingListings />} />
           <Route path="checkout" element={<ShoppingCheckout />} />
           <Route path="account" element={<ShoppingAccount />} />
         </Route>
