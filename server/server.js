@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import { configDotenv } from "dotenv";
 import authRoutes from "./routes/authRoutes.js";
 import adminRoutes from './routes/adminRoutes.js'
+import shopRoutes from './routes/shopRoutes.js'
 
 const app = express();
 configDotenv();
@@ -37,6 +38,7 @@ app.use(
 );
 app.use('/api/auth',authRoutes);
 app.use('/api/admin/products',adminRoutes);
+app.use('/api/shop/products',shopRoutes);
 
 app.listen(Port, () =>
   console.log(`Server is running at Port ${Port}`)

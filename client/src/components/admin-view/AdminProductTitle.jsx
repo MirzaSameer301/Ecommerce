@@ -18,7 +18,7 @@ const AdminProductTitle = ({
           <p className={`${product.salePrice ? "line-through" : ""}`}>
             ${product.price}
           </p>
-          <p className="font-medium">${product.salePrice}</p>
+          <p className={`font-medium ${product.salePrice>0 ?"block":'hidden'}`}>${product.salePrice}</p>
         </div>
         <div className="flex justify-between items-center">
           <button onClick={()=>{

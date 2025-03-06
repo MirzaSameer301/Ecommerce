@@ -40,7 +40,7 @@ export const editProduct = createAsyncThunk(
 );
 export const fetchAllProducts = createAsyncThunk(
   "/products/get",
-  async (formData) => {
+  async () => {
     const response = await axios.get(
       "http://localhost:3000/api/admin/products/get"
     );

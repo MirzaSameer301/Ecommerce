@@ -79,7 +79,7 @@ const ProductForm = ({ formData, setFormData,handleSubmit,editProductId}) => {
                 onChange={(e) =>
                   setFormData({ ...formData, [field.name]: e.target.value })
                 }
-                required
+                {...(field.name !== "salePrice" && { required: true })}
               />
             </div>
           );

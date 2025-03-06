@@ -55,6 +55,7 @@ const AdminProducts = () => {
             if (data.payload.success) {
               dispatch(fetchAllProducts());
               setFormData(initialState);
+              setUploadImageUrl("");
               setImageFile(null);
               setOpenProductBar(false);
               toast("Product Added Successfully");
