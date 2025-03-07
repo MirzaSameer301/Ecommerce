@@ -52,6 +52,7 @@ export const shoppingViewHeaderMenuItems = [
       { id: "h&m", label: "H&M" },
     ],
   };
+
   
   export const sortOptions = [
     { id: "price-lowtohigh", label: "Price: Low to High" },
