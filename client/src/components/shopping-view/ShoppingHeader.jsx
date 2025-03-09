@@ -34,7 +34,7 @@ const UserProfileAndCart = () => {
   };
   useEffect(()=>{
     dispatch(fetchCartItems(user.id))
-  },[])
+  },[dispatch])
   console.log(cartItems);
   
   return (
