@@ -9,13 +9,11 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
   return (
     <div>
       <Dialog open={open} onOpenChange={handleDialogClose}>
-        <DialogContent className="grid grid-cols-2 gap-8 sm:p-12 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[70vw] max-h-[40vw] overflow-hidden">
-          <div className="relative overflow-hidden rounded-lg">
+        <DialogContent className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-8 sm:p-12 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[70vw] max-h-screen md:max-h-[33rem] overflow-auto md:overflow-hidden">
+          <div className="relative overflow-hidden rounded-lg w-full max-h-[30rem]">
             <img
               src={productDetails?.image}
               alt={productDetails?.title}
-              width={600}
-              height={600}
               className="aspect-square w-full object-cover"
             />
           </div>
@@ -137,7 +135,8 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
                   tygufsjdhjfjkgbv mhsgvdbsn hgsgdf,c bjhsfl bfhbhvlnf jhgsjg
                   vbv
                 </div>
-              </div><div className="flex flex-col gap-2">
+              </div>
+              <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-4">
                   <div className="bg-gray-600 text-white font-semibold h-9 w-9 items-center justify-center flex rounded-full cursor-pointer">
                     U
