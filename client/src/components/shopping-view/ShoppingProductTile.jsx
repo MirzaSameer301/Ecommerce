@@ -1,8 +1,8 @@
 import React from "react";
 
-const ShoppingProductTile = ({ product }) => {
+const ShoppingProductTile = ({ product,handleGetProductDetails }) => {
   return (
-    <div className="w-full border-1 shadow-sm rounded-md">
+    <div className="w-full border-1 shadow-sm rounded-md" onClick={()=>handleGetProductDetails(product._id)}>
       <div className="object-cover overflow-hidden rounded-t-md relative">
         <span className={`${product.salePrice > 0 ?"block":"hidden"} bg-red-500 px-2 text-xs text-white rounded-2xl font-semibold py-1 absolute top-2 left-2`}>
           Sale

@@ -6,13 +6,14 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { fetchFilteredProducts } from "@/store/shopProductSlice";
+import { fetchFilteredProducts,fetchProductDetails } from "@/store/shopProductSlice";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { TbArrowsDownUp } from "react-icons/tb";
 import ShoppingFilter from "@/components/shopping-view/ShoppingFilter";
 import { sortOptions } from "@/components/shopping-view/config";
 import { createSearchParams, useSearchParams } from "react-router-dom";
+import ProductDetailsDialog from "@/components/shopping-view/ProductDetailsDialog";
 
 const createSearchParamsHelper = (filterParams) => {
   const queryParams = [];
@@ -26,10 +27,13 @@ const createSearchParamsHelper = (filterParams) => {
 };
 
 const ShoppingListings = () => {
-  const { productList } = useSelector((state) => state.shopProducts);
+  const { productList, productDetails } = useSelector(
+    (state) => state.shopProducts
+  );
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
   const dispatch = useDispatch();
 
   const categorySearchParam = searchParams.get("category");
@@ -37,6 +41,12 @@ const ShoppingListings = () => {
   const handleSort = (value) => {
     setSort(value);
   };
+
+  useEffect(() => {
+    if (productDetails !== null) {
+      setOpenDetailsDialog(true);
+    }
+  }, [productDetails]);
 
   useEffect(() => {
     setSort("price-lowtohigh");
@@ -52,7 +62,9 @@ const ShoppingListings = () => {
 
   useEffect(() => {
     if (filters !== null && sort !== null) {
-      dispatch(fetchFilteredProducts({filterParams:filters,sortParams:sort}));
+      dispatch(
+        fetchFilteredProducts({ filterParams: filters, sortParams: sort })
+      );
     }
   }, [dispatch, sort, filters]);
 
@@ -74,6 +86,11 @@ const ShoppingListings = () => {
     setFilters(copyFilters);
     sessionStorage.setItem("filters", JSON.stringify(copyFilters));
   };
+
+  const handleGetProductDetails=(getCurrentProductId)=>{
+    dispatch(fetchProductDetails(getCurrentProductId))
+  }
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 ">
       {/* Sidebar Filters */}
@@ -85,33 +102,51 @@ const ShoppingListings = () => {
       <div className="m-2">
         <div className="flex items-center justify-between py-2">
           <p className="text-lg font-semibold">All Products</p>
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <button className="text-sm flex items-center gap-2 border p-2 font-medium">
-                <span>Sort by</span>
-                <TbArrowsDownUp />
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuRadioGroup value={sort} onValueChange={handleSort}>
-                {sortOptions.map((sortitem) => (
-                  <DropdownMenuRadioItem value={sortitem.id} key={sortitem.id}>
-                    {sortitem.label}
-                  </DropdownMenuRadioItem>
-                ))}
-              </DropdownMenuRadioGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div className="flex gap-2 items-center">
+            <span className="text-sm font-semibold text-gray-300">
+              Products {productList.length}
+            </span>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <button className="text-sm flex items-center gap-2 border p-2 font-medium">
+                  <span>Sort by</span>
+                  <TbArrowsDownUp />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuRadioGroup value={sort} onValueChange={handleSort}>
+                  {sortOptions.map((sortitem) => (
+                    <DropdownMenuRadioItem
+                      value={sortitem.id}
+                      key={sortitem.id}
+                    >
+                      {sortitem.label}
+                    </DropdownMenuRadioItem>
+                  ))}
+                </DropdownMenuRadioGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
         <hr />
         <br />
         {/* Product Listings */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           {productList.map((product) => (
-            <ShoppingProductTile key={product._id} product={product} />
+            <ShoppingProductTile
+              key={product._id}
+              product={product}
+              handleGetProductDetails={handleGetProductDetails}
+            />
           ))}
         </div>
       </div>
+      <ProductDetailsDialog
+        open={openDetailsDialog}
+        setOpen={setOpenDetailsDialog}
+        productDetails={productDetails}
+      />
     </div>
   );
 };
