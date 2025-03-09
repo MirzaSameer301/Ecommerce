@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { SiThunderstore } from "react-icons/si";
 import { GrCart } from "react-icons/gr";
@@ -20,18 +20,41 @@ import { useDispatch, useSelector } from "react-redux";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { logoutUser } from "@/store/authSlice";
+import UserCartWrapper from "./UserCartWrapper";
+import { fetchCartItems } from "@/store/cartSlice";
 
-const UserProfileAndCart = ({ user }) => {
+const UserProfileAndCart = () => {
   const dispatch = useDispatch();
+  const [openCartSheet, setOpenCartSheet] = useState(false);
+  const {cartItems} =useSelector((state)=>state.userCart);
+  const {user}=useSelector((state)=>state.auth)
 
   const handleLogout = () => {
     dispatch(logoutUser());
   };
+  useEffect(()=>{
+    dispatch(fetchCartItems(user.id))
+  },[])
+  console.log(cartItems);
+  
   return (
     <div className="flex flex-col md:flex-row gap-4 md:gap-2 px-3 md:p-0 md:items-center">
-      <div className="border rounded-full h-9 w-9 p-2 text-lg">
-        <GrCart />
-      </div>
+      <Sheet open={openCartSheet} onOpenChange={() => setOpenCartSheet(false)}>
+        <div
+          className="border rounded-full h-9 w-9 p-2 text-lg"
+          onClick={() => setOpenCartSheet(true)}
+        >
+          <GrCart />
+        </div>
+        <UserCartWrapper
+          setOpenCartSheet={setOpenCartSheet}
+          cartItems={
+            cartItems && cartItems.items && cartItems.items.length > 0
+              ? cartItems.items
+              : []
+          }
+        />
+      </Sheet>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <div className="bg-black text-white font-semibold h-9 w-9 items-center justify-center flex rounded-full cursor-pointer">

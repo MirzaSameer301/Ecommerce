@@ -3,7 +3,7 @@ import { addToCart, deleteCartItem, fetchCartItems, updateCartQty } from '../con
 
 const router=express.Router();
 
-router.get('/get/:userId',fetchCartItems);
+// router.get('/get/:userId',fetchCartItems);
 router.post('/add',addToCart);
 router.put('/update-cart',updateCartQty);
 router.delete('/:userId/:productId',deleteCartItem);

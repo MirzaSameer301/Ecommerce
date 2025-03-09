@@ -108,7 +108,7 @@ export const fetchCartItems = async (req, res) => {
 export const updateCartQty = async (req, res) => {
   try {
     const { userId, productId, quantity } = req.body;
-    if (!userId || productId || quantity <= 0) {
+    if (!userId || !productId || quantity <= 0) {
       return res.status(400).json({
         success: false,
         message: "Invalid Data Provided",

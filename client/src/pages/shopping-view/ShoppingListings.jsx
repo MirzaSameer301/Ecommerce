@@ -6,7 +6,10 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { fetchFilteredProducts,fetchProductDetails } from "@/store/shopProductSlice";
+import {
+  fetchFilteredProducts,
+  fetchProductDetails,
+} from "@/store/shopProductSlice";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { TbArrowsDownUp } from "react-icons/tb";
@@ -14,6 +17,8 @@ import ShoppingFilter from "@/components/shopping-view/ShoppingFilter";
 import { sortOptions } from "@/components/shopping-view/config";
 import { createSearchParams, useSearchParams } from "react-router-dom";
 import ProductDetailsDialog from "@/components/shopping-view/ProductDetailsDialog";
+import { addToCart, fetchCartItems } from "@/store/cartSlice";
+import { toast } from "sonner";
 
 const createSearchParamsHelper = (filterParams) => {
   const queryParams = [];
@@ -30,6 +35,7 @@ const ShoppingListings = () => {
   const { productList, productDetails } = useSelector(
     (state) => state.shopProducts
   );
+  const { user } = useSelector((state) => state.auth);
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -87,9 +93,24 @@ const ShoppingListings = () => {
     sessionStorage.setItem("filters", JSON.stringify(copyFilters));
   };
 
-  const handleGetProductDetails=(getCurrentProductId)=>{
-    dispatch(fetchProductDetails(getCurrentProductId))
-  }
+  const handleGetProductDetails = (getCurrentProductId) => {
+    dispatch(fetchProductDetails(getCurrentProductId));
+  };
+
+  const handleAddToCart = (getCurrentProductId) => {
+    dispatch(
+      addToCart({
+        userId: user.id,
+        productId: getCurrentProductId,
+        quantity: 1,
+      })
+    ).then((data) => {
+      if (data.payload.success) {
+        dispatch(fetchCartItems(user.id))
+        toast("Product is added to cart");
+      }
+    });
+  };
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 ">
@@ -138,6 +159,7 @@ const ShoppingListings = () => {
               key={product._id}
               product={product}
               handleGetProductDetails={handleGetProductDetails}
+              handleAddToCart={handleAddToCart}
             />
           ))}
         </div>
@@ -146,6 +168,7 @@ const ShoppingListings = () => {
         open={openDetailsDialog}
         setOpen={setOpenDetailsDialog}
         productDetails={productDetails}
+        handleAddToCart={handleAddToCart}
       />
     </div>
   );

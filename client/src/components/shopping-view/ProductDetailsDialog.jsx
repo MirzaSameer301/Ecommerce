@@ -2,15 +2,25 @@ import React from "react";
 import { Dialog, DialogContent } from "../ui/dialog";
 import { FaStar } from "react-icons/fa6";
 
-const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
+const ProductDetailsDialog = ({
+  open,
+  setOpen,
+  productDetails,
+  handleAddToCart,
+}) => {
   const handleDialogClose = () => {
     setOpen(false);
   };
+  if (!productDetails) {
+    return null; // Render nothing if productDetails is null
+  }
+
+
   return (
     <div>
       <Dialog open={open} onOpenChange={handleDialogClose}>
         <DialogContent className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-8 sm:p-12 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[70vw] max-h-screen md:max-h-[33rem] overflow-auto md:overflow-hidden">
-          <div className="relative overflow-hidden rounded-lg w-full max-h-[30rem]">
+          <div className="relative overflow-hidden rounded-lg w-full max-h-[28rem]">
             <img
               src={productDetails?.image}
               alt={productDetails?.title}
@@ -39,6 +49,11 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
                   ${productDetails?.salePrice}
                 </p>
               ) : null}
+            </div>
+            <div className="bg-gray-800 hover:opacity-85 cursor-pointer w-full p-2 text-white mt-4 font-semibold rounded text-center">
+              <button onClick={() => handleAddToCart(productDetails._id)}>
+                Add to Cart
+              </button>
             </div>
             <br />
             <hr />
@@ -154,7 +169,7 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
                   vbv
                 </div>
               </div>
-              <div className="w-full flex justify-center gap-4 mt-6 mb-12">
+              <div className="w-full flex justify-center gap-4 mt-6 md:mb-20">
                 <input
                   className="border rouneded w-2/3 p-2"
                   type="text"
