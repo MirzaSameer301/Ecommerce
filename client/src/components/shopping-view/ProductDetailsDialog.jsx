@@ -1,6 +1,8 @@
 import React from "react";
 import { Dialog, DialogContent } from "../ui/dialog";
 import { FaStar } from "react-icons/fa6";
+import { useDispatch } from "react-redux";
+import { setProductDetails } from "@/store/shopProductSlice";
 
 const ProductDetailsDialog = ({
   open,
@@ -8,13 +10,15 @@ const ProductDetailsDialog = ({
   productDetails,
   handleAddToCart,
 }) => {
+  const dispatch = useDispatch();
+
   const handleDialogClose = () => {
     setOpen(false);
+    dispatch(setProductDetails);
   };
   if (!productDetails) {
-    return null; // Render nothing if productDetails is null
+    return null;
   }
-
 
   return (
     <div>

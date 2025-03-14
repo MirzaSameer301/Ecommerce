@@ -5,16 +5,16 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 const initialState = {
   isLoading: false,
   productList: [],
-  productDetails:null
+  productDetails: null,
 };
 
 export const fetchFilteredProducts = createAsyncThunk(
   "/products/get",
-  async ({filterParams,sortParams}) => {
-    const query=new URLSearchParams({
+  async ({ filterParams, sortParams }) => {
+    const query = new URLSearchParams({
       ...filterParams,
-      sortBy:sortParams
-    })
+      sortBy: sortParams,
+    });
     const response = await axios.get(
       `http://localhost:3000/api/shop/products/get?${query}`
     );
@@ -36,20 +36,25 @@ export const fetchProductDetails = createAsyncThunk(
 const shopProdutSlice = createSlice({
   name: "shoppingProducts",
   initialState,
-  reducers: {},
+  reducers: {
+    setProductDetails: (state) => {
+      state.productDetails = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
-    .addCase(fetchFilteredProducts.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.productList = action.payload.data;
-    })
-    .addCase(fetchFilteredProducts.pending, (state) => {
+      .addCase(fetchFilteredProducts.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.productList = action.payload.data;
+      })
+      .addCase(fetchFilteredProducts.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(fetchFilteredProducts.rejected, (state, action) => {
         state.isLoading = false;
         state.productList = [];
-      }).addCase(fetchProductDetails.pending, (state, action) => {
+      })
+      .addCase(fetchProductDetails.pending, (state, action) => {
         state.isLoading = true;
       })
       .addCase(fetchProductDetails.fulfilled, (state, action) => {
@@ -62,5 +67,5 @@ const shopProdutSlice = createSlice({
       });
   },
 });
-
+export const {setProductDetails}=shopProdutSlice.actions;
 export default shopProdutSlice.reducer;
