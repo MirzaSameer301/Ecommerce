@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { SiThunderstore } from "react-icons/si";
 import { GrCart } from "react-icons/gr";
 import { shoppingViewHeaderMenuItems } from "./config";
@@ -22,21 +27,22 @@ import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { logoutUser } from "@/store/authSlice";
 import UserCartWrapper from "./UserCartWrapper";
 import { fetchCartItems } from "@/store/cartSlice";
+import { fetchFilteredProducts, setProductDetails } from "@/store/shopProductSlice";
 
 const UserProfileAndCart = () => {
   const dispatch = useDispatch();
   const [openCartSheet, setOpenCartSheet] = useState(false);
-  const {cartItems} =useSelector((state)=>state.userCart);
-  const {user}=useSelector((state)=>state.auth)
+  const { cartItems } = useSelector((state) => state.userCart);
+  const { user } = useSelector((state) => state.auth);
 
   const handleLogout = () => {
     dispatch(logoutUser());
   };
-  useEffect(()=>{
-    dispatch(fetchCartItems(user.id))
-  },[dispatch])
+  useEffect(() => {
+    dispatch(fetchCartItems(user.id));
+  }, [dispatch]);
   console.log(cartItems);
-  
+
   return (
     <div className="flex flex-col md:flex-row gap-4 md:gap-2 px-3 md:p-0 md:items-center">
       <Sheet open={openCartSheet} onOpenChange={() => setOpenCartSheet(false)}>
@@ -82,16 +88,40 @@ const UserProfileAndCart = () => {
 };
 
 const MenuItems = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const dispatch = useDispatch();
+  const handleNavigate=(getCurrentMenuItem)=> {
+    sessionStorage.removeItem("filters");
+    const currentFilter =
+      getCurrentMenuItem.id !== "home" &&
+      getCurrentMenuItem.id !== "products" &&
+      getCurrentMenuItem.id !== "search"
+        ? {
+            category: [getCurrentMenuItem.id],
+          }
+        : null;
+
+    sessionStorage.setItem("filters", JSON.stringify(currentFilter));
+
+    location.pathname.includes("listing") && currentFilter !== null
+      ? setSearchParams(
+          new URLSearchParams(`?category=${getCurrentMenuItem.id}`)
+        )
+      : navigate(getCurrentMenuItem.path);
+  }
+
   return (
-    <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 font-medium md:text-sm ">
+    <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-8 font-medium md:text-sm ">
       {shoppingViewHeaderMenuItems.map((menuItem) => (
-        <Link
+        <label
           key={menuItem.id}
-          to={menuItem.path}
-          className="hover:bg-gray-100 md:hover:bg-background p-3 md:p-0 "
+          onClick={() => handleNavigate(menuItem)}
+          className="hover:bg-gray-100 md:hover:bg-background p-3 md:p-0 cursor-pointer hover:shadow-lg"
         >
           {menuItem.label}
-        </Link>
+        </label>
       ))}
     </div>
   );

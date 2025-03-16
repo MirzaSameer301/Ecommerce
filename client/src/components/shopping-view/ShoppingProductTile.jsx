@@ -3,7 +3,7 @@ import React from "react";
 const ShoppingProductTile = ({ product, handleGetProductDetails,handleAddToCart }) => {
   return (
     <div className="w-full border-1 shadow-sm rounded-md">
-      <div className="" onClick={() => handleGetProductDetails(product._id)}>
+      <div className="cursor-pointer" onClick={() => handleGetProductDetails(product._id)}>
         <div className="object-cover overflow-hidden rounded-t-md relative">
           <span
             className={`${
@@ -41,7 +41,7 @@ const ShoppingProductTile = ({ product, handleGetProductDetails,handleAddToCart 
       <div className="p-2">
         <button
           onClick={() => handleAddToCart(product._id)}
-          className="bg-gray-900 w-full p-2 text-white font-semibold rounded hover:opacity-85"
+          className="bg-gray-900 w-full p-2 text-white font-semibold rounded hover:opacity-85 cursor-grab"
         >
           Add to cart
         </button>

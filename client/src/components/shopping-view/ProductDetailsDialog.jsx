@@ -14,7 +14,7 @@ const ProductDetailsDialog = ({
 
   const handleDialogClose = () => {
     setOpen(false);
-    dispatch(setProductDetails);
+    dispatch(setProductDetails());
   };
   if (!productDetails) {
     return null;
@@ -54,8 +54,8 @@ const ProductDetailsDialog = ({
                 </p>
               ) : null}
             </div>
-            <div className="bg-gray-800 hover:opacity-85 cursor-pointer w-full p-2 text-white mt-4 font-semibold rounded text-center">
-              <button onClick={() => handleAddToCart(productDetails._id)}>
+            <div className="bg-gray-900 hover:opacity-85 cursor-pointer w-full p-2 text-white mt-4 font-semibold rounded text-center">
+              <button className="outline-none cursor-pointer animate-bounce" onClick={() => handleAddToCart(productDetails._id)}>
                 Add to Cart
               </button>
             </div>
