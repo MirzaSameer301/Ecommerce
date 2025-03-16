@@ -7,6 +7,7 @@ import authRoutes from "./routes/authRoutes.js";
 import adminRoutes from './routes/adminRoutes.js'
 import shopRoutes from './routes/shopRoutes.js'
 import cartRoutes from './routes/cartRoutes.js'
+import addressRoutes from './routes/addressRoutes.js'
 
 const app = express();
 configDotenv();
@@ -41,6 +42,7 @@ app.use('/api/auth',authRoutes);
 app.use('/api/admin/products',adminRoutes);
 app.use('/api/shop/products',shopRoutes);
 app.use('/api/shop/cart',cartRoutes);
+app.use('/api/shop/address',addressRoutes);
 
 app.listen(Port, () =>
   console.log(`Server is running at Port ${Port}`)
