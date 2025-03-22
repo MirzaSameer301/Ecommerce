@@ -6,43 +6,43 @@ const initialState = {
   addressList: [],
 };
 
-const addNewAddress = createAsyncThunk(
-  "address/addnNewAddress",
+export const addNewAddress = createAsyncThunk(
+  "address/addNewAddress",
   async (formData) => {
     const response = await axios.post(
       `http://localhost:3000/api/shop/address/add`,
       formData
     );
-    return response.date;
+    return response.data;
   }
 );
 
-const fetchAllAddresses = createAsyncThunk(
+export const fetchAllAddresses = createAsyncThunk(
   "address/fetchAllAddresses",
   async (userId) => {
     const response = await axios.get(
       `http://localhost:3000/api/shop/address/get/${userId}`
     );
-    return response.date;
+    return response.data;
   }
 );
-const editAddress = createAsyncThunk(
+export const editAddress = createAsyncThunk(
   "address/editAddress",
   async ({ userId, addressId, formData }) => {
     const response = await axios.put(
       `http://localhost:3000/api/shop/address/update/${userId}/${addressId}`,
       formData
     );
-    return response.date;
+    return response.data;
   }
 );
-const deleteAddress = createAsyncThunk(
+export const deleteAddress = createAsyncThunk(
   "address/deleteAddress",
   async ({ userId, addressId }) => {
     const response = await axios.delete(
       `http://localhost:3000/api/shop/address/delete/${userId}/${addressId}`
     );
-    return response.date;
+    return response.data;
   }
 );
 const addressSlice = createSlice({
