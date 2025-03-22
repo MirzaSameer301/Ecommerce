@@ -4,10 +4,11 @@ import cors from "cors";
 import mongoose from "mongoose";
 import { configDotenv } from "dotenv";
 import authRoutes from "./routes/authRoutes.js";
-import adminRoutes from './routes/adminRoutes.js'
-import shopRoutes from './routes/shopRoutes.js'
-import cartRoutes from './routes/cartRoutes.js'
-import addressRoutes from './routes/addressRoutes.js'
+import adminRoutes from "./routes/adminRoutes.js";
+import shopRoutes from "./routes/shopRoutes.js";
+import cartRoutes from "./routes/cartRoutes.js";
+import addressRoutes from "./routes/addressRoutes.js";
+import orderRoutes from "./routes/orderRoutes.js";
 
 const app = express();
 configDotenv();
@@ -20,7 +21,7 @@ mongoose
     console.log(err);
   });
 
-const Port=process.env.PORT || 5000;
+const Port = process.env.PORT || 5000;
 
 app.use(cookieParser());
 app.use(express.json());
@@ -38,12 +39,11 @@ app.use(
     credentials: true,
   })
 );
-app.use('/api/auth',authRoutes);
-app.use('/api/admin/products',adminRoutes);
-app.use('/api/shop/products',shopRoutes);
-app.use('/api/shop/cart',cartRoutes);
-app.use('/api/shop/address',addressRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/admin/products", adminRoutes);
+app.use("/api/shop/products", shopRoutes);
+app.use("/api/shop/cart", cartRoutes);
+app.use("/api/shop/address", addressRoutes);
+app.use("/api/shop/order", orderRoutes);
 
-app.listen(Port, () =>
-  console.log(`Server is running at Port ${Port}`)
-);
+app.listen(Port, () => console.log(`Server is running at Port ${Port}`));
