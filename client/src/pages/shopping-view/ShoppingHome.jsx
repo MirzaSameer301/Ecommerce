@@ -5,9 +5,9 @@ import {
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import image1 from "../../assets/image1.jpg";
-import image2 from "../../assets/image2.jpg";
-import image3 from "../../assets/image3.jpg";
+import image1 from "../../assets/banner-1.webp";
+import image2 from "../../assets/banner-2.webp";
+import image3 from "../../assets/banner-3.webp";
 import { FaArrowLeft, FaArrowRight, FaOdnoklassniki } from "react-icons/fa6";
 import { IoFootsteps, IoManSharp, IoWoman } from "react-icons/io5";
 import { BiSolidWatch } from "react-icons/bi";
