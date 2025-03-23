@@ -4,10 +4,14 @@ const AddressCard = ({
   addressInfo,
   handleEditAddress,
   handleDeleteAddress,
+  setSelectedAddress,
 }) => {
   return (
     <div className="p-3 border rounded shadow m-2">
-      <div className="flex flex-col text-sm font-medium gap-2">
+      <div
+        onClick={() => setSelectedAddress(addressInfo)}
+        className="flex flex-col text-sm font-medium gap-2"
+      >
         <label>
           Address: <span className="font-normal">{addressInfo.address}</span>
         </label>

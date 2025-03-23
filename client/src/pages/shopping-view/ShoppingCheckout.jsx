@@ -1,12 +1,17 @@
 import CartItemsContent from "@/components/shopping-view/CartItemsContent";
 import ShoppingAddress from "@/components/shopping-view/ShoppingAddress";
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import account from "../../assets/account.jpg";
+import { toast } from "sonner";
+import { createNewOrder } from "@/store/orderSlice";
 
 const ShoppingCheckout = () => {
   const { cartItems } = useSelector((state) => state.userCart);
-  console.log(cartItems);
+  const { user } = useSelector((state) => state.auth);
+  const [isCashOnDelivery, setIsCashOnDelivery] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState(null);
+  const dispatch = useDispatch();
   const totalCartAmount =
     cartItems && cartItems.items.length > 0
       ? cartItems.items.reduce(
@@ -19,6 +24,51 @@ const ShoppingCheckout = () => {
           0
         )
       : 0;
+
+  const handleCheckOut = () => {
+    if (selectedAddress === null) {
+      toast("please select the address first");
+      return;
+    }
+    if (cartItems.length === 0) {
+      toast("Your cart is empty");
+    }
+
+    if (isCashOnDelivery) {
+      const newOrder = {
+        userId: user.id,
+        cartId: cartItems._id,
+        cartItems: cartItems.items.map((cartItem) => ({
+          productId: cartItem.productId,
+          title: cartItem.title,
+          image: cartItem.image,
+          price: cartItem.salePrice > 0 ? cartItem.salePrice : cartItem.price,
+          quantity: cartItem.quantity,
+        })),
+        addressInfo: {
+          addressId: selectedAddress._id,
+          address: selectedAddress.address,
+          city: selectedAddress.city,
+          pincode: selectedAddress.pincode,
+          phone: selectedAddress.phone,
+          notes: selectedAddress.notes,
+        },
+        orderStatus: "pending",
+        paymentMethod: "cashOnDelivery",
+        paymentStatus: "unpaid",
+        totalAmount: totalCartAmount,
+        orderDate: new Date(),
+        orderUpdateDate: new Date(),
+      };
+      dispatch(createNewOrder(newOrder)).then((data) => {
+        console.log(data);
+      });
+    } else {
+      toast("please select payment method");
+      return;
+    }
+  };
+
   return (
     <div className="flex flex-col">
       <div className="relative h-[300px] overflow-hidden mb-3">
@@ -29,7 +79,7 @@ const ShoppingCheckout = () => {
         />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-        <ShoppingAddress />
+        <ShoppingAddress setSelectedAddress={setSelectedAddress} />
         <div className="">
           {cartItems && cartItems.items && cartItems.items.length > 0
             ? cartItems.items.map((item) => (
@@ -43,7 +93,24 @@ const ShoppingCheckout = () => {
             </div>
           </div>
           <div className="w-full p-2">
-            <button className="bg-black w-full p-2 text-white font-bold cursor-pointer rounded hover:opacity-80">Check Out</button>
+            <div className="flex items-center mb-4">
+              <input
+                type="checkbox"
+                id="cashOnDelivery"
+                checked={isCashOnDelivery}
+                onChange={() => setIsCashOnDelivery(!isCashOnDelivery)}
+                className="mr-2"
+              />
+              <label htmlFor="cashOnDelivery" className="text-lg font-semibold">
+                Cash on Delivery
+              </label>
+            </div>
+            <button
+              onClick={handleCheckOut}
+              className="bg-black w-full p-2 text-white font-bold cursor-pointer rounded hover:opacity-80"
+            >
+              Check Out
+            </button>
           </div>
         </div>
       </div>

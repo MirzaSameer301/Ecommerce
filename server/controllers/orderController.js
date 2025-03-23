@@ -1,6 +1,6 @@
-const Order = require("../../models/Order");
-const Cart = require("../../models/Cart");
-const Product = require("../../models/Product");
+import Order from '../models/Order.js'
+import Product from '../models/Product.js'
+import Cart from '../models/Cart.js'
 
 export const createOrder = async (req, res) => {
   try {

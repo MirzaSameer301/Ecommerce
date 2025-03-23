@@ -5,4 +5,4 @@ const router = express.Router();
 
 router.post("/create", createOrder);
 router.post("/confirm", confirmOrder);
-module.exports = router;
+export default router;

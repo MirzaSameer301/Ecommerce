@@ -17,7 +17,7 @@ const initialData = {
   phone: "",
   notes: "",
 };
-const ShoppingAddress = () => {
+const ShoppingAddress = ({setSelectedAddress}) => {
   const [formData, setFormData] = useState(initialData);
   const { user } = useSelector((state) => state.auth);
   const { addressList } = useSelector((state) => state.shopAddress);
@@ -110,6 +110,7 @@ const ShoppingAddress = () => {
             addressInfo={addressInfo}
             handleEditAddress={handleEditAddress}
             handleDeleteAddress={handleDeleteAddress}
+            setSelectedAddress={setSelectedAddress}
           />
         ))}
       </div>
