@@ -4,7 +4,8 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import account from "../../assets/account.jpg";
 import { toast } from "sonner";
-import { createNewOrder } from "@/store/orderSlice";
+import { confirmOrder, createNewOrder } from "@/store/orderSlice";
+import { useNavigate } from "react-router-dom";
 
 const ShoppingCheckout = () => {
   const { cartItems } = useSelector((state) => state.userCart);
@@ -12,6 +13,7 @@ const ShoppingCheckout = () => {
   const [isCashOnDelivery, setIsCashOnDelivery] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const totalCartAmount =
     cartItems && cartItems.items.length > 0
       ? cartItems.items.reduce(
@@ -27,11 +29,22 @@ const ShoppingCheckout = () => {
 
   const handleCheckOut = () => {
     if (selectedAddress === null) {
-      toast("please select the address first");
+      toast.error("please select the address first!", {
+        style: {
+          backgroundColor: "#ff4d4f", 
+          color: "#fff",           
+        },
+      });
       return;
     }
     if (cartItems.length === 0) {
-      toast("Your cart is empty");
+      toast.error("Your cart is empty!", {
+        style: {
+          backgroundColor: "#ff4d4f", 
+          color: "#fff",             
+        },
+      });
+      return
     }
 
     if (isCashOnDelivery) {
@@ -61,10 +74,21 @@ const ShoppingCheckout = () => {
         orderUpdateDate: new Date(),
       };
       dispatch(createNewOrder(newOrder)).then((data) => {
-        console.log(data);
+        if (data.payload.success) {
+          dispatch(confirmOrder(data.payload.orderId)).then((data) => {
+            if (data.payload.success) {
+              navigate("/shop/order-placed");
+            }
+          });
+        }
       });
     } else {
-      toast("please select payment method");
+      toast.error("please select a payment method first!", {
+        style: {
+          backgroundColor: "#ff4d4f", 
+          color: "#fff",             
+        },
+      });
       return;
     }
   };
@@ -79,7 +103,10 @@ const ShoppingCheckout = () => {
         />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-        <ShoppingAddress setSelectedAddress={setSelectedAddress} />
+        <ShoppingAddress
+          selectedAddress={selectedAddress}
+          setSelectedAddress={setSelectedAddress}
+        />
         <div className="">
           {cartItems && cartItems.items && cartItems.items.length > 0
             ? cartItems.items.map((item) => (

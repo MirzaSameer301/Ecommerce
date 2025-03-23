@@ -18,6 +18,7 @@ import CheckAuth from "./components/CheckAuth";
 import UnAuth from "./pages/UnAuth";
 import { useDispatch, useSelector } from "react-redux";
 import { checkAuth } from "./store/authSlice";
+import ShoppingOrderPlaced from "./pages/shopping-view/ShoppingOrderPlaced";
 
 export const App = () => {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -68,6 +69,7 @@ export const App = () => {
           <Route path="listing" element={<ShoppingListings />} />
           <Route path="checkout" element={<ShoppingCheckout />} />
           <Route path="account" element={<ShoppingAccount />} />
+          <Route path="order-placed" element={<ShoppingOrderPlaced/>}/>
         </Route>
         <Route path="/unauth-page" element={<UnAuth />} />
         <Route path="*" element={<NotFoundPage />} />

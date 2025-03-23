@@ -5,13 +5,18 @@ const AddressCard = ({
   handleEditAddress,
   handleDeleteAddress,
   setSelectedAddress,
+  selectedAddress,
 }) => {
+  const isSelected = selectedAddress?._id === addressInfo._id;
+
   return (
-    <div className="p-3 border rounded shadow m-2">
-      <div
-        onClick={() => setSelectedAddress(addressInfo)}
-        className="flex flex-col text-sm font-medium gap-2"
-      >
+    <div
+      onClick={() => setSelectedAddress(addressInfo)}
+      className={`p-3 border rounded shadow m-2 cursor-pointer transition-all duration-300 ${
+        isSelected ? "border-2 border-black" : "border-gray-300"
+      }`}
+    >
+      <div className="flex flex-col text-sm font-medium gap-2">
         <label>
           Address: <span className="font-normal">{addressInfo.address}</span>
         </label>
@@ -30,13 +35,19 @@ const AddressCard = ({
       </div>
       <div className="flex items-center justify-between mt-2">
         <button
-          onClick={() => handleEditAddress(addressInfo)}
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent selecting when clicking edit
+            handleEditAddress(addressInfo);
+          }}
           className="bg-black cursor-pointer text-white hover:opacity-80 font-semibold p-2 rounded"
         >
           Edit
         </button>
         <button
-          onClick={() => handleDeleteAddress(addressInfo)}
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent selecting when clicking delete
+            handleDeleteAddress(addressInfo);
+          }}
           className="bg-black cursor-pointer text-white hover:opacity-80 font-semibold p-2 rounded"
         >
           Delete

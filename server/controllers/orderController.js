@@ -12,21 +12,19 @@ export const createOrder = async (req, res) => {
       cartId,
     } = req.body;
 
-    // Create a new order with Cash on Delivery method
     const newlyCreatedOrder = new Order({
       userId,
       cartId,
       cartItems,
       addressInfo,
-      orderStatus: "pending", // Initial order status
+      orderStatus: "pending", 
       paymentMethod: "Cash on Delivery",
-      paymentStatus: "unpaid", // Payment status for COD
+      paymentStatus: "unpaid",
       totalAmount,
       orderDate: new Date(),
       orderUpdateDate: new Date(),
     });
 
-    // Save the order to the database
     await newlyCreatedOrder.save();
 
     res.status(201).json({
@@ -56,11 +54,8 @@ export const confirmOrder = async (req, res) => {
       });
     }
 
-    // Update order status to confirmed and payment status to paid
     order.orderStatus = "confirmed";
-    order.paymentStatus = "paid";
-
-    // Deduct stock for each product in the order
+    order.paymentStatus = "unpaid";
     for (let item of order.cartItems) {
       let product = await Product.findById(item.productId);
 
@@ -75,11 +70,9 @@ export const confirmOrder = async (req, res) => {
       await product.save();
     }
 
-    // Delete the cart associated with the order
     const getCartId = order.cartId;
     await Cart.findByIdAndDelete(getCartId);
 
-    // Save the updated order
     await order.save();
 
     res.status(200).json({
