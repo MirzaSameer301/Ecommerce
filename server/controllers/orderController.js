@@ -1,23 +1,17 @@
-import Order from '../models/Order.js'
-import Product from '../models/Product.js'
-import Cart from '../models/Cart.js'
+import Order from "../models/Order.js";
+import Product from "../models/Product.js";
+import Cart from "../models/Cart.js";
 
 export const createOrder = async (req, res) => {
   try {
-    const {
-      userId,
-      cartItems,
-      addressInfo,
-      totalAmount,
-      cartId,
-    } = req.body;
+    const { userId, cartItems, addressInfo, totalAmount, cartId } = req.body;
 
     const newlyCreatedOrder = new Order({
       userId,
       cartId,
       cartItems,
       addressInfo,
-      orderStatus: "pending", 
+      orderStatus: "pending",
       paymentMethod: "Cash on Delivery",
       paymentStatus: "unpaid",
       totalAmount,
@@ -89,3 +83,49 @@ export const confirmOrder = async (req, res) => {
   }
 };
 
+export const getAllOrders = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    let orders = await Order.find({ userId });
+    if (!orders.length) {
+      return res.status(404).json({
+        success: false,
+        message: "No orders found!",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      data: orders,
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({
+      success: false,
+      message: "Some error occurred!",
+    });
+  }
+};
+export const getOrderDetails = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const order = await Order.findById(id);
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      data: order,
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({
+      success: false,
+      message: "Some error occurred!",
+    });
+  }
+};
