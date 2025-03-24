@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Dialog } from "../ui/dialog";
 import OrderDetailsDialog from "./OrderDetailsDialog";
 import {
@@ -9,47 +9,93 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getAllOrdersForAdmin,
+  getOrderDetailsForAdmin,
+  resetOrderDetails,
+} from "@/store/adminOrderSlice";
 
 const AdminOrdersView = () => {
-    const [openOrderDetails, setOpenOrderDetails] = useState(false);
-    return (
-      <div>
-        <h2 className="text-xl font-bold p-4">Orders History</h2>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Order ID</TableHead>
-              <TableHead>Order Date</TableHead>
-              <TableHead>Order Status</TableHead>
-              <TableHead>Order Price</TableHead>
-              <TableHead className="sr-only">Details</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell>1234456</TableCell>
-              <TableCell>23/01/2020</TableCell>
-              <TableCell>InProcess</TableCell>
-              <TableCell>$389</TableCell>
-              <TableCell>
-                <Dialog
-                  open={openOrderDetails}
-                  onOpenChange={setOpenOrderDetails}
-                >
-                  <button
-                    onClick={() => setOpenOrderDetails(true)}
-                    className="bg-black text-white font-semibold p-2 rounded hover:opacity-80 cursor-pointer"
+  const [openOrderDetails, setOpenOrderDetails] = useState(false);
+  const { orderList, orderDetails } = useSelector((state) => state.adminOrder);
+  const dispatch = useDispatch();
+
+  const handleGetOrderDetails = (getId) => {
+    dispatch(getOrderDetailsForAdmin(getId));
+  };
+
+  useEffect(() => {
+    dispatch(getAllOrdersForAdmin());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (orderDetails !== null) {
+      setOpenOrderDetails(true);
+    }
+  }, [orderDetails]);
+
+  const handleCloseDialog = () => {
+    setOpenOrderDetails(false);
+    dispatch(resetOrderDetails());
+  };
+
+  return (
+    <div>
+      <h2 className="text-xl font-bold p-4">Orders History</h2>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Order ID</TableHead>
+            <TableHead>Order Date</TableHead>
+            <TableHead>Order Status</TableHead>
+            <TableHead>Order Price</TableHead>
+            <TableHead className="sr-only">Details</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {orderList &&
+            orderList.length > 0 &&
+            orderList.map((orderItem) => (
+              <TableRow key={orderItem._id}>
+                <TableCell>{orderItem._id}</TableCell>
+                <TableCell>{orderItem.orderDate.split("T")[0]}</TableCell>
+                <TableCell>
+                  <span
+                    className={`${
+                      orderItem.orderStatus === "rejected"
+                        ? "bg-red-600"
+                        : orderItem.orderStatus === "confirmed"
+                        ? "bg-green-600"
+                        : "bg-black"
+                    } p-1 rounded-lg text-white`}
                   >
-                    Details
-                  </button>
-                  <OrderDetailsDialog />
-                </Dialog>
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </div>
-    );
+                    {orderItem.orderStatus}
+                  </span>
+                </TableCell>
+                <TableCell>${orderItem.totalAmount}</TableCell>
+                <TableCell>
+                  <Dialog
+                    open={openOrderDetails}
+                    onOpenChange={handleCloseDialog}
+                  >
+                    <button
+                      onClick={() => handleGetOrderDetails(orderItem._id)}
+                      className="bg-black text-white font-semibold p-2 rounded hover:opacity-80 cursor-pointer"
+                    >
+                      Details
+                    </button>
+                    {orderDetails && (
+                      <OrderDetailsDialog orderDetails={orderDetails} />
+                    )}
+                  </Dialog>
+                </TableCell>
+              </TableRow>
+            ))}
+        </TableBody>
+      </Table>
+    </div>
+  );
 };
 
 export default AdminOrdersView;

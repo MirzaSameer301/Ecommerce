@@ -9,6 +9,7 @@ import shopRoutes from "./routes/shopRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
 import addressRoutes from "./routes/addressRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
+import adminOrderRoutes from "./routes/adminOrderRoutes.js";
 
 const app = express();
 configDotenv();
@@ -41,6 +42,7 @@ app.use(
 );
 app.use("/api/auth", authRoutes);
 app.use("/api/admin/products", adminRoutes);
+app.use("/api/admin/order", adminOrderRoutes);
 app.use("/api/shop/products", shopRoutes);
 app.use("/api/shop/cart", cartRoutes);
 app.use("/api/shop/address", addressRoutes);
