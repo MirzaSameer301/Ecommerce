@@ -55,7 +55,12 @@ const ProductDetailsDialog = ({
               ) : null}
             </div>
             <div className="bg-gray-900 hover:opacity-85 cursor-pointer w-full p-2 text-white mt-4 font-semibold rounded text-center">
-              <button className="outline-none cursor-pointer animate-bounce" onClick={() => handleAddToCart(productDetails._id)}>
+              <button
+                className="outline-none cursor-pointer animate-bounce"
+                onClick={() =>
+                  handleAddToCart(productDetails._id, productDetails.totalStock)
+                }
+              >
                 Add to Cart
               </button>
             </div>

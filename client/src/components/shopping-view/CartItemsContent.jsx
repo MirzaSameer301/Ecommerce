@@ -6,6 +6,13 @@ import { toast } from "sonner";
 
 const CartItemsContent = ({ cartItem }) => {
   const { user } = useSelector((state) => state.auth);
+  const { cartItems } = useSelector((state) => state.userCart);
+  const { productList} = useSelector(
+    (state) => state.shopProducts
+  );
+
+  console.log(cartItems);
+  
 
   const dispatch = useDispatch();
   const handleDeleteCartItem = (getCartItem) => {
@@ -19,6 +26,33 @@ const CartItemsContent = ({ cartItem }) => {
   };
 
   const handleUpdateQuantity = (getCartItem, typeOfAction) => {
+    if (typeOfAction === "plus") {
+      let getCartItems = cartItems.items || [];
+
+      if (getCartItems.length) {
+        const indexOfCurrentItem = getCartItems.findIndex(
+          (item) => item.productId === getCartItem.productId
+        );
+        const getCurrentProductIndex = productList.findIndex(
+          (product) => product._id === getCartItem.productId
+        );
+        
+        const getTotalStock = productList[getCurrentProductIndex].totalStock;
+        if (indexOfCurrentItem > -1) {
+          const getQuantity = getCartItems[indexOfCurrentItem].quantity;
+          if (getQuantity + 1 > getTotalStock) {
+            toast.error(`Only ${getQuantity} Items can be added to cart`, {
+              style: {
+                backgroundColor: "red",
+                color: "white",
+              },
+            });
+
+            return;
+          }
+        }
+      }
+    }
     dispatch(
       updateCartQuantity({
         userId: user?.id,
@@ -56,16 +90,16 @@ const CartItemsContent = ({ cartItem }) => {
         <div className="flex gap-4 items-center justify-between font-medium text-gray-600">
           <div className="">
             <button
-              className={`border py-0.5 px-2`}
+              className={`border py-0.5 px-2 cursor-pointer`}
               onClick={() => handleUpdateQuantity(cartItem, "minus")}
-              disabled={cartItem.quantity ===1}
+              disabled={cartItem.quantity === 1}
             >
               -
             </button>
             <span>{cartItem.quantity}</span>
             <button
               onClick={() => handleUpdateQuantity(cartItem, "plus")}
-              className="border py-0.5 px-2"
+              className="border py-0.5 px-2 cursor-pointer"
             >
               +
             </button>

@@ -36,6 +36,7 @@ const ShoppingListings = () => {
     (state) => state.shopProducts
   );
   const { user } = useSelector((state) => state.auth);
+  const { cartItems } = useSelector((state) => state.userCart);
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -43,6 +44,7 @@ const ShoppingListings = () => {
   const dispatch = useDispatch();
 
   const categorySearchParam = searchParams.get("category");
+console.log(productList);
 
   const handleSort = (value) => {
     setSort(value);
@@ -97,7 +99,27 @@ const ShoppingListings = () => {
     dispatch(fetchProductDetails(getCurrentProductId));
   };
 
-  const handleAddToCart = (getCurrentProductId) => {
+  const handleAddToCart = (getCurrentProductId, getTotalStock) => {
+    let getCartItems = cartItems.items || [];
+
+    if (getCartItems.length) {
+      const indexOfCurrentItem = getCartItems.findIndex(
+        (item) => item.productId === getCurrentProductId
+      );
+      if (indexOfCurrentItem > -1) {
+        const getQuantity = getCartItems[indexOfCurrentItem].quantity;
+        if (getQuantity + 1 > getTotalStock) {
+          toast.error(`Only ${getQuantity} Items can be added to cart`,{
+            style:{
+              backgroundColor:"red",
+              color:"white"
+            }
+          });
+
+          return;
+        }
+      }
+    }
     dispatch(
       addToCart({
         userId: user.id,
@@ -106,7 +128,7 @@ const ShoppingListings = () => {
       })
     ).then((data) => {
       if (data.payload.success) {
-        dispatch(fetchCartItems(user.id))
+        dispatch(fetchCartItems(user.id));
         toast("Product is added to cart");
       }
     });

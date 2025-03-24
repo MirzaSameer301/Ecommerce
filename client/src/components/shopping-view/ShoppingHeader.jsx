@@ -27,7 +27,6 @@ import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { logoutUser } from "@/store/authSlice";
 import UserCartWrapper from "./UserCartWrapper";
 import { fetchCartItems } from "@/store/cartSlice";
-import { fetchFilteredProducts, setProductDetails } from "@/store/shopProductSlice";
 
 const UserProfileAndCart = () => {
   const dispatch = useDispatch();
