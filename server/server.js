@@ -11,6 +11,7 @@ import addressRoutes from "./routes/addressRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import adminOrderRoutes from "./routes/adminOrderRoutes.js";
 import searchRoutes from './routes/searchRoutes.js'
+import reviewRoutes from './routes/reviewRoutes.js'
 
 const app = express();
 configDotenv();
@@ -50,5 +51,6 @@ app.use("/api/shop/cart", cartRoutes);
 app.use("/api/shop/address", addressRoutes);
 app.use("/api/shop/order", orderRoutes);
 app.use("/api/shop/search",searchRoutes);
+app.use("/api/shop/review",reviewRoutes);
 
 app.listen(Port, () => console.log(`Server is running at Port ${Port}`));
