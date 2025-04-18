@@ -41,10 +41,10 @@ const ShoppingListings = () => {
   const [sort, setSort] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
+  const [keyword, setKeyword] = useState("");
   const dispatch = useDispatch();
 
   const categorySearchParam = searchParams.get("category");
-console.log(productList);
 
   const handleSort = (value) => {
     setSort(value);
@@ -134,6 +134,7 @@ console.log(productList);
     });
   };
 
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 ">
       {/* Sidebar Filters */}
@@ -143,6 +144,7 @@ console.log(productList);
         <ShoppingFilter filters={filters} handleFilter={handleFilter} />
       </div>
       <div className="m-2">
+      
         <div className="flex items-center justify-between py-2">
           <p className="text-lg font-semibold">All Products</p>
           <div className="flex gap-2 items-center">

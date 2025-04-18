@@ -19,6 +19,7 @@ import UnAuth from "./pages/UnAuth";
 import { useDispatch, useSelector } from "react-redux";
 import { checkAuth } from "./store/authSlice";
 import ShoppingOrderPlaced from "./pages/shopping-view/ShoppingOrderPlaced";
+import ShoppingSearch from "./pages/shopping-view/ShoppingSearch";
 
 export const App = () => {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -67,6 +68,7 @@ export const App = () => {
         >
           <Route path="home" element={<ShoppingHome />} />
           <Route path="listing" element={<ShoppingListings />} />
+          <Route path="search" element={<ShoppingSearch/>}/>
           <Route path="checkout" element={<ShoppingCheckout />} />
           <Route path="account" element={<ShoppingAccount />} />
           <Route path="order-placed" element={<ShoppingOrderPlaced/>}/>
