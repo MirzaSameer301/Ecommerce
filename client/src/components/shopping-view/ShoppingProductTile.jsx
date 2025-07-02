@@ -32,7 +32,7 @@ const ShoppingProductTile = ({
           />
         </div>
         <div className="flex flex-col gap-2 p-2">
-          <h2 className="font-semibold">{product.title}</h2>
+          <h2 className="font-semibold line-clamp-1">{product.title}</h2>
           <div className="flex justify-between items-center text-sm text-gray-500">
             <p>{product.category}</p>
             <p className="">{product.brand}</p>

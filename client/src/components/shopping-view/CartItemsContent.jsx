@@ -11,7 +11,6 @@ const CartItemsContent = ({ cartItem }) => {
     (state) => state.shopProducts
   );
 
-  console.log(cartItems);
   
 
   const dispatch = useDispatch();

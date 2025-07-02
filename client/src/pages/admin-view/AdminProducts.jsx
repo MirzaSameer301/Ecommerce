@@ -73,7 +73,11 @@ const AdminProducts = () => {
   }, [dispatch]);
 
   const handleDelete = (productId) => {
-    dispatch(deleteProduct(productId))
+    dispatch(deleteProduct(productId)).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(fetchAllProducts());
+      }
+    });
   };
 
   
@@ -99,6 +103,11 @@ const AdminProducts = () => {
                 setOpenProductBar={setOpenProductBar}
               />
             ))}
+            {productList.length === 0 && (
+              <div className="col-span-4 text-center text-gray-500">
+                No products available.
+              </div>
+            )}
         </div>
       </div>
 

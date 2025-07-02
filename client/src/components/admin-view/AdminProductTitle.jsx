@@ -13,7 +13,7 @@ const AdminProductTitle = ({
         <img src={product.image} alt={product.title} className="h-56 w-full" />
       </div>
       <div className="flex flex-col gap-2 p-4">
-        <h2 className="font-semibold">{product.title}</h2>
+        <h2 className="font-semibold line-clamp-1">{product.title}</h2>
         <div className="flex justify-between items-center">
           <p className={`${product.salePrice ? "line-through" : ""}`}>
             ${product.price}

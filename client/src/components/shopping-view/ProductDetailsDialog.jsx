@@ -60,7 +60,7 @@ const ProductDetailsDialog = ({
   return (
     <div>
       <Dialog open={open} onOpenChange={handleDialogClose}>
-        <DialogContent className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-8 sm:p-12 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[70vw] max-h-screen md:max-h-[33rem] overflow-auto md:overflow-hidden">
+        <DialogContent className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-8 sm:p-12 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[70vw] max-h-screen md:max-h-[33rem] overflow-auto">
           <div className="relative overflow-hidden rounded-lg w-full max-h-[28rem]">
             <img
               src={productDetails?.image}

@@ -6,6 +6,7 @@ import account from "../../assets/account.jpg";
 import { toast } from "sonner";
 import { confirmOrder, createNewOrder } from "@/store/orderSlice";
 import { useNavigate } from "react-router-dom";
+import { fetchCartItems } from "@/store/cartSlice";
 
 const ShoppingCheckout = () => {
   const { cartItems } = useSelector((state) => state.userCart);
@@ -31,8 +32,8 @@ const ShoppingCheckout = () => {
     if (selectedAddress === null) {
       toast.error("please select the address first!", {
         style: {
-          backgroundColor: "#ff4d4f", 
-          color: "#fff",           
+          backgroundColor: "#ff4d4f",
+          color: "#fff",
         },
       });
       return;
@@ -40,11 +41,11 @@ const ShoppingCheckout = () => {
     if (cartItems.length === 0) {
       toast.error("Your cart is empty!", {
         style: {
-          backgroundColor: "#ff4d4f", 
-          color: "#fff",             
+          backgroundColor: "#ff4d4f",
+          color: "#fff",
         },
       });
-      return
+      return;
     }
 
     if (isCashOnDelivery) {
@@ -78,6 +79,7 @@ const ShoppingCheckout = () => {
           dispatch(confirmOrder(data.payload.orderId)).then((data) => {
             if (data.payload.success) {
               navigate("/shop/order-placed");
+              dispatch(fetchCartItems(user.id));
             }
           });
         }
@@ -85,8 +87,8 @@ const ShoppingCheckout = () => {
     } else {
       toast.error("please select a payment method first!", {
         style: {
-          backgroundColor: "#ff4d4f", 
-          color: "#fff",             
+          backgroundColor: "#ff4d4f",
+          color: "#fff",
         },
       });
       return;

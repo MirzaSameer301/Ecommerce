@@ -40,16 +40,18 @@ const UserProfileAndCart = () => {
   useEffect(() => {
     dispatch(fetchCartItems(user.id));
   }, [dispatch]);
-  console.log(cartItems);
 
   return (
     <div className="flex flex-col md:flex-row gap-4 md:gap-2 px-3 md:p-0 md:items-center">
       <Sheet open={openCartSheet} onOpenChange={() => setOpenCartSheet(false)}>
         <div
-          className="border rounded-full h-9 w-9 p-2 text-lg"
+          className="border rounded-full h-9 w-9 p-2 text-lg relative"
           onClick={() => setOpenCartSheet(true)}
         >
           <GrCart />
+          <div className=" absolute right-0 top-[-10px] rounded-2xl text-xs text-center w-4 bg-black text-white font-bold">
+            {cartItems?.items?.length}
+          </div>
         </div>
         <UserCartWrapper
           setOpenCartSheet={setOpenCartSheet}
@@ -91,7 +93,7 @@ const MenuItems = () => {
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useDispatch();
-  const handleNavigate=(getCurrentMenuItem)=> {
+  const handleNavigate = (getCurrentMenuItem) => {
     sessionStorage.removeItem("filters");
     const currentFilter =
       getCurrentMenuItem.id !== "home" &&
@@ -109,7 +111,7 @@ const MenuItems = () => {
           new URLSearchParams(`?category=${getCurrentMenuItem.id}`)
         )
       : navigate(getCurrentMenuItem.path);
-  }
+  };
 
   return (
     <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-8 font-medium md:text-sm ">
